@@ -731,11 +731,28 @@ def run_server(client, config, output, _):
     def do_get_configuration():
         """Get the configuration of the server."""
         output.write(client.get_server_configuration())
+        
+    def do_get_tracing():
+        """Get the tracing mode."""
+        output.write(client.get_tracing())
+
+    def do_set_log_level():
+        """Enable tracing."""
+        output.write(client.set_tracing_enable(config.tracing_mode))
+        
+    def do_set_log_level():
+        """Disable tracing."""
+        output.write(client.set_tracing_disable(config.tracing_mode))
 
     actions = {
         'log_level': {
             'get': do_get_log_level,
             'set': do_set_log_level
+        },
+        'tracing': {
+            'get': do_get_tracing,
+            'enable': do_set_tracing_enable,
+            'disable': do_set_tracing_disable
         },
         'configuration': {
             'get': do_get_configuration,
