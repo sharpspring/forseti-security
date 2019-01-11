@@ -348,7 +348,11 @@ def _grant_svc_acct_roles(target_id,
     Returns:
         bool: Whether or not a role script has been generated
     """
-
+    print ("installer/util/gcloud.py ln 4351 _grant_svc_acct_roles: \n"
+           "target_id: {} \n project_id: {} \n gcp_service_Account: {} \n"
+           "user_can_grant_roles: {} \n roles: {} \n"
+           .format(target_id, project_id, gcp_service_account,
+                   user_can_grant_roles, roles))
     grant_roles_cmds = _grant_roles(roles, target_id, project_id,
                                     gcp_service_account,
                                     user_can_grant_roles)
@@ -377,7 +381,11 @@ def _grant_roles(roles_map, target_id, project_id,
     Returns:
         list: A list of roles that user couldn't grant
     """
-
+    print ("installer/util/gcloud.py ln 384 _grant_roles: \n"
+           "roles_map: {} \n target_id: {} \n project_id: {} \n "
+           "gcp_service_account: {} \n user_can_grant_roles{} \n "
+           .format(roles_map, target_id, project_id, gcp_service_account,
+                   user_can_grant_roles))
     assign_roles_cmds = []
 
     for (resource_type, roles) in roles_map.iteritems():
@@ -416,6 +424,11 @@ def _grant_role(role, resource_args, resource_id,
         str: A command to grant the IAM role if the role was
             not granted successfully
     """
+    print ("installer/util/gcloud.py ln 419 _grant_role: \n"
+           "role: {} \n resource_args: {} \n resource_id: {} \n "
+           "gcp_service_account: {} \n user_can_grant_roles{} \n "
+           .format(role, resource_args, resource_id, gcp_service_account,
+                   user_can_grant_roles))
     iam_role_cmd = ['gcloud']
     iam_role_cmd.extend(resource_args)
     iam_role_cmd.extend([
@@ -591,6 +604,8 @@ def create_or_reuse_service_acct(acct_type,
         acct_idx = utils.get_choice_id(svc_accts, print_fun)
         acct_email = svc_accts[acct_idx - 1]['email']
     print ('\t{}'.format(acct_email))
+    print ("installer/util/gcloud.py ln 607 create_or_reuse_service_acct\n "
+           "This is the account email: {}".format(acct_email))
     return acct_email
 
 
