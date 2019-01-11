@@ -348,7 +348,7 @@ def _grant_svc_acct_roles(target_id,
     Returns:
         bool: Whether or not a role script has been generated
     """
-    print ("installer/util/gcloud.py ln 4351 _grant_svc_acct_roles: \n"
+    print ("*** installer/util/gcloud.py ln 4351 _grant_svc_acct_roles *** \n"
            "target_id: {} \n project_id: {} \n gcp_service_Account: {} \n"
            "user_can_grant_roles: {} \n roles: {} \n"
            .format(target_id, project_id, gcp_service_account,
@@ -381,7 +381,7 @@ def _grant_roles(roles_map, target_id, project_id,
     Returns:
         list: A list of roles that user couldn't grant
     """
-    print ("installer/util/gcloud.py ln 384 _grant_roles: \n"
+    print ("*** installer/util/gcloud.py ln 384 _grant_roles *** \n"
            "roles_map: {} \n target_id: {} \n project_id: {} \n "
            "gcp_service_account: {} \n user_can_grant_roles{} \n "
            .format(roles_map, target_id, project_id, gcp_service_account,
@@ -400,6 +400,8 @@ def _grant_roles(roles_map, target_id, project_id,
             resource_id = target_id
 
         for role in roles:
+            print ("*** installer/util/gcloud.py ln 403 _grant_roles *** \n "
+                   "Looping through role {}".format(role))
             iam_role_cmd = _grant_role(role, resource_args,
                                        resource_id, gcp_service_account,
                                        user_can_grant_roles)
@@ -424,7 +426,7 @@ def _grant_role(role, resource_args, resource_id,
         str: A command to grant the IAM role if the role was
             not granted successfully
     """
-    print ("installer/util/gcloud.py ln 419 _grant_role: \n"
+    print ("*** installer/util/gcloud.py ln 419 _grant_role *** \n"
            "role: {} \n resource_args: {} \n resource_id: {} \n "
            "gcp_service_account: {} \n user_can_grant_roles{} \n "
            .format(role, resource_args, resource_id, gcp_service_account,
