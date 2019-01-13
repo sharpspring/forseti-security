@@ -319,12 +319,9 @@ def grant_server_svc_acct_iam_roles(enable_write,
            .format(has_role_script_rest))
     return has_role_script_bucket or has_role_script_rest
 
-def grant_server_svc_acct_project_roles(enable_write,
-                                access_target,
-                                target_id,
+def grant_server_svc_acct_project_roles(target_id,
                                 project_id,
                                 gcp_service_account,
-                                cai_bucket_name,
                                 user_can_grant_roles):
     """Grant the following Project IAM roles to GCP service account.
 
