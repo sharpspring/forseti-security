@@ -304,18 +304,19 @@ def grant_server_svc_acct_iam_roles(enable_write,
         'service_accounts': constants.SVC_ACCT_ROLES,
     }
 
+    print("These are the IAM ROLES roles: {}\n".format(roles))
     has_role_script_bucket = _grant_bucket_roles(
         gcp_service_account,
         cai_bucket_name,
         constants.FORSETI_CAI_BUCKET_ROLES,
         user_can_grant_roles)
-
+    print("grant_server_svc_acct_IAM_roles: \nhas_role_script_bucket: "
+          "{}\n".format(has_role_script_bucket))
     has_role_script_rest = _grant_svc_acct_roles(
         target_id, project_id, gcp_service_account,
         user_can_grant_roles, roles)
-    print ("grant_server_svc_acct_IAM_roles: \nhas_role_script_bucket: "
-           "{}\n has_role_script_rest: {}\n"
-           .format(has_role_script_bucket, has_role_script_rest))
+    print ("grant_server_svc_acct_IAM_roles: has_role_script_rest: {}\n"
+           .format(has_role_script_rest))
     return has_role_script_bucket or has_role_script_rest
 
 def grant_server_svc_acct_project_roles(enable_write,
@@ -355,19 +356,19 @@ def grant_server_svc_acct_project_roles(enable_write,
         '%ss' % access_target: access_target_roles,
         'forseti_project': constants.PROJECT_IAM_ROLES_SERVER,
     }
-
+    print ("These are the PROJECT roles: {}\n".format(roles))
     has_role_script_bucket = _grant_bucket_roles(
         gcp_service_account,
         cai_bucket_name,
         constants.FORSETI_CAI_BUCKET_ROLES,
         user_can_grant_roles)
-
+    print("grant_server_svc_acct_project_roles: \nhas_role_script_bucket: "
+          "{}\n".format(has_role_script_bucket))
     has_role_script_rest = _grant_svc_acct_roles(
         target_id, project_id, gcp_service_account,
         user_can_grant_roles, roles)
-    print ("grant_server_svc_acct_project_roles: \nhas_role_script_bucket: "
-           "{}\n has_role_script_rest: {}\n"
-           .format(has_role_script_bucket, has_role_script_rest))
+    print ("grant_server_svc_acct_project_roles: has_role_script_rest: {}\n"
+           .format(has_role_script_rest))
     return has_role_script_bucket or has_role_script_rest
 
 def _grant_bucket_roles(gcp_service_account,
@@ -395,6 +396,7 @@ def _grant_bucket_roles(gcp_service_account,
     failed_commands = []
 
     for role in roles_to_grant:
+        print ("_grant_bucket_roles: This is the current role: {}".format(role))
         member = 'serviceAccount:{}:{}'.format(gcp_service_account, role)
         bucket = 'gs://{}'.format(bucket_name)
         bucket_role_cmd = ['gsutil', 'iam', 'ch', member, bucket]
