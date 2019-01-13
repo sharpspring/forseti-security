@@ -348,12 +348,7 @@ def grant_server_svc_acct_project_roles(enable_write,
            "***\n")
     utils.print_banner('Assigning Project IAM Roles To The GCP Service Account',
                        gcp_service_account)
-    access_target_roles = constants.GCP_READ_IAM_ROLES
-    if enable_write:
-        access_target_roles.extend(constants.GCP_WRITE_IAM_ROLES)
-
     roles = {
-        '%ss' % access_target: access_target_roles,
         'forseti_project': constants.PROJECT_IAM_ROLES_SERVER,
     }
     print ("These are the PROJECT roles: {}\n".format(roles))

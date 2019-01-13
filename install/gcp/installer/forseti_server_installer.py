@@ -81,12 +81,9 @@ class ForsetiServerInstaller(ForsetiInstaller):
               "This is deploying forseti using deployment template. Now to"
               " grant service account roles: ")
         self.has_roles_script = gcloud.grant_server_svc_acct_project_roles(
-            self.enable_write_access,
-            self.access_target,
             self.target_id,
             self.project_id,
             self.gcp_service_acct_email,
-            self._get_cai_bucket_name(),
             self.user_can_grant_roles)
         print ("This is the FIRST PROJECT self.has_roles_script: {}"
                .format(self.has_roles_script))
