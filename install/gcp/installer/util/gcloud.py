@@ -264,6 +264,111 @@ def grant_server_svc_acct_roles(enable_write,
 
     return has_role_script_bucket or has_role_script_rest
 
+def grant_server_svc_acct_iam_roles(enable_write,
+                                access_target,
+                                target_id,
+                                project_id,
+                                gcp_service_account,
+                                cai_bucket_name,
+                                user_can_grant_roles):
+    """Grant the following IAM roles to GCP service account.
+
+    Org/Folder/Project:
+        AppEngine App Viewer, Cloud SQL Viewer, Network Viewer
+        Project Browser, Security Reviewer, Service Management Quota Viewer
+        Security Admin
+
+    Args:
+        enable_write (bool): Whether or not to enable write access.
+        access_target (str): Access target, either org, folder or project.
+        target_id (str): Id of the access_target.
+        project_id (str): GCP Project Id.
+        gcp_service_account (str): GCP service account email.
+        cai_bucket_name (str): The name of the CAI bucket.
+        user_can_grant_roles (bool): Whether or not user has
+            access to grant roles.
+
+    Returns:
+        bool: Whether or not a role script has been generated.
+    """
+    print ("*** installer/util/gcloud.py grant_server_svc_acct_IAM_roles "
+           "***\n")
+    utils.print_banner('Assigning IAM Roles To The GCP Service Account',
+                       gcp_service_account)
+    access_target_roles = constants.GCP_READ_IAM_ROLES
+    if enable_write:
+        access_target_roles.extend(constants.GCP_WRITE_IAM_ROLES)
+
+    roles = {
+        '%ss' % access_target: access_target_roles,
+        'service_accounts': constants.SVC_ACCT_ROLES,
+    }
+
+    has_role_script_bucket = _grant_bucket_roles(
+        gcp_service_account,
+        cai_bucket_name,
+        constants.FORSETI_CAI_BUCKET_ROLES,
+        user_can_grant_roles)
+
+    has_role_script_rest = _grant_svc_acct_roles(
+        target_id, project_id, gcp_service_account,
+        user_can_grant_roles, roles)
+    print ("grant_server_svc_acct_IAM_roles: \nhas_role_script_bucket: "
+           "{}\n has_role_script_rest: {}\n"
+           .format(has_role_script_bucket, has_role_script_rest))
+    return has_role_script_bucket or has_role_script_rest
+
+def grant_server_svc_acct_project_roles(enable_write,
+                                access_target,
+                                target_id,
+                                project_id,
+                                gcp_service_account,
+                                cai_bucket_name,
+                                user_can_grant_roles):
+    """Grant the following Project IAM roles to GCP service account.
+
+    Project:
+        Cloud SQL Client, Storage Object Viewer, Storage Object Creator
+
+    Args:
+        enable_write (bool): Whether or not to enable write access.
+        access_target (str): Access target, either org, folder or project.
+        target_id (str): Id of the access_target.
+        project_id (str): GCP Project Id.
+        gcp_service_account (str): GCP service account email.
+        cai_bucket_name (str): The name of the CAI bucket.
+        user_can_grant_roles (bool): Whether or not user has
+            access to grant roles.
+
+    Returns:
+        bool: Whether or not a role script has been generated.
+    """
+    print ("*** installer/util/gcloud.py grant_server_svc_acct_project_roles "
+           "***\n")
+    utils.print_banner('Assigning Project IAM Roles To The GCP Service Account',
+                       gcp_service_account)
+    access_target_roles = constants.GCP_READ_IAM_ROLES
+    if enable_write:
+        access_target_roles.extend(constants.GCP_WRITE_IAM_ROLES)
+
+    roles = {
+        '%ss' % access_target: access_target_roles,
+        'forseti_project': constants.PROJECT_IAM_ROLES_SERVER,
+    }
+
+    has_role_script_bucket = _grant_bucket_roles(
+        gcp_service_account,
+        cai_bucket_name,
+        constants.FORSETI_CAI_BUCKET_ROLES,
+        user_can_grant_roles)
+
+    has_role_script_rest = _grant_svc_acct_roles(
+        target_id, project_id, gcp_service_account,
+        user_can_grant_roles, roles)
+    print ("grant_server_svc_acct_project_roles: \nhas_role_script_bucket: "
+           "{}\n has_role_script_rest: {}\n"
+           .format(has_role_script_bucket, has_role_script_rest))
+    return has_role_script_bucket or has_role_script_rest
 
 def _grant_bucket_roles(gcp_service_account,
                         bucket_name,
@@ -286,6 +391,7 @@ def _grant_bucket_roles(gcp_service_account,
     Returns:
         bool: Whether or not a role script has been generated.
     """
+    print ("*** installer/util/gcloud.py ln 388 _grant_bucket_roles *** \n")
     failed_commands = []
 
     for role in roles_to_grant:
@@ -441,7 +547,7 @@ def _grant_role(role, resource_args, resource_id,
         '--role={}'.format(role),
     ])
     if user_can_grant_roles:
-        print('Assigning {} on {}... '.format(role, resource_id), end='')
+        print('cAssigning {} on {}... '.format(role, resource_id), end='')
         sys.stdout.flush()
         return_code, _, err = utils.run_command(iam_role_cmd)
         if return_code:

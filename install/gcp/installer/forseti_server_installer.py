@@ -80,7 +80,7 @@ class ForsetiServerInstaller(ForsetiInstaller):
         print("*** installer/forseti_server_installer.py ln 80 deploy *** \n "
               "This is deploying forseti using deployment template. Now to"
               " grant service account roles: ")
-        self.has_roles_script = gcloud.grant_server_svc_acct_roles(
+        self.has_roles_script = gcloud.grant_server_svc_acct_project_roles(
             self.enable_write_access,
             self.access_target,
             self.target_id,
@@ -88,7 +88,8 @@ class ForsetiServerInstaller(ForsetiInstaller):
             self.gcp_service_acct_email,
             self._get_cai_bucket_name(),
             self.user_can_grant_roles)
-
+        print ("This is the FIRST PROJECT self.has_roles_script: {}"
+               .format(self.has_roles_script))
         success, deployment_name = super(ForsetiServerInstaller, self).deploy(
             deployment_tpl_path, conf_file_path, bucket_name)
 
@@ -106,6 +107,17 @@ class ForsetiServerInstaller(ForsetiInstaller):
                 constants.RULES_DIR_PATH, bucket_name,
                 is_directory=True, dry_run=self.config.dry_run)
 
+            self.has_roles_script = gcloud.grant_server_svc_acct_iam_roles(
+                self.enable_write_access,
+                self.access_target,
+                self.target_id,
+                self.project_id,
+                self.gcp_service_acct_email,
+                self._get_cai_bucket_name(),
+                self.user_can_grant_roles)
+
+            print("This is the SECOND IAM self.has_roles_script: {}"
+                  .format(self.has_roles_script))
             # Waiting for VM to be initialized.
             instance_name = 'forseti-{}-vm-{}'.format(
                 self.config.installation_type,
