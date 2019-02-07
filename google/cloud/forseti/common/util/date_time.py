@@ -15,9 +15,10 @@
 """Common utility functions regarding date and time."""
 
 import calendar
-from datetime import datetime
+import datetime
 from dateutil import parser
 import re
+
 
 from google.cloud.forseti.common.util import logger
 from google.cloud.forseti.common.util import string_formats
