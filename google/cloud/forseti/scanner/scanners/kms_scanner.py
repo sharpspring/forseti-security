@@ -68,7 +68,7 @@ class KMSScanner(base_scanner.BaseScanner):
                 'rule_index': violation.rule_index,
                 'rule_name': violation.rule_name,
                 'violation_type': violation.violation_type,
-                'violation_data': violation.violation_reason,
+                'violation_data': violation.violation_data,
                 'resource_data': violation.resource_data
             }
 
@@ -114,6 +114,7 @@ class KMSScanner(base_scanner.BaseScanner):
         scoped_session, data_access = model_manager.get(self.model_name)
         with scoped_session as session:
             for key in data_access.scanner_iter(session, 'kms_cryptokey'):
+
                 if not key.parent_type_name.startswith('kms_keyring'):
                     raise ValueError(
                         'Unexpected type of parent resource type: '

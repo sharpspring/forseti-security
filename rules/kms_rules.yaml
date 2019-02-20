@@ -42,20 +42,22 @@
 
 rules:
   - name: All cryptographic keys should be rotated in 100 days
-    mode: whitelist
+    mode: blacklist
     resource:
       - type: organization
         resource_ids:
           - '*'
     key:
-       - rotation_period: 10 #days
-         algorithms:
-          - GOOGLE_SYMMETRIC_ENCRYPTION
-          - XYZ
+       - rotation_period: 100 #days
+       - algorithms:
+         - GOOGLE_SYMMETRIC_ENCRYPTION
+         - XYZ
          protection_level: HSM
          purpose: symmetric
          state:
-          - ENABLED
+         - ENABLED
+
+
 
 
 
