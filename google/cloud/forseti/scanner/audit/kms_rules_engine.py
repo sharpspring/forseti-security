@@ -445,6 +445,7 @@ class Rule(object):
         violations = []
         mode = self.rule['mode']
         has_violation = False
+        state = key.primary_version.get('state')
 
         crypto_key = self.rule['key']
         for key_data in crypto_key:
@@ -475,6 +476,9 @@ class Rule(object):
             elif mode == WHITELIST and not all_matched:
                 has_violation = True
 
+        if not state == 'ENABLED':
+            has_violation = False
+
         if has_violation:
             violations.append(RuleViolation(
                 resource_id=key.id,
@@ -487,7 +491,7 @@ class Rule(object):
                 primary_version=key.primary_version,
                 next_rotation_time=key.next_rotation_time,
                 rotation_period=key.rotation_period,
-                violation_data=key,
+                violation_data='abc',
                 key_creation_time=key.create_time,
                 resource_data=key.data))
 
